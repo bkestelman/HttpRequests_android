@@ -7,9 +7,9 @@ String url = "http://myserver.com/hello/";
 // Access the HttpRequestManager singleton
 HttpRequestManager httpRequestManager = HttpRequestManager.getInstance(getApplicationContext());
 
-// Choose a Callback implementation. The Callback interface contains a callback() method, which is called once you receive a response from
-the server. You can use one of the preset Callback implementations here, or implement the Callback interface and override callback() to
-make your own. 
+// Choose a Callback implementation. The Callback interface contains a callback() method, which is called once you receive a 
+// response from the server. You can use one of the preset Callback implementations here, or implement the Callback interface
+// and override callback() to make your own. 
 LogResponse logResponse = new LogResponse(); // The simplest Callback
 
 /* POST Example */
