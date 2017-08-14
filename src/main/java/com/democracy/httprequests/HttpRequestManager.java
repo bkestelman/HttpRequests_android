@@ -1,6 +1,7 @@
 package com.democracy.httprequests;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -20,6 +21,9 @@ public class HttpRequestManager {
     private static HttpRequestManager singleton;
 
     private RequestQueue rq;
+
+    // Logging tags
+    private static final String ERROR_TAG = "Http Error";
 
     private HttpRequestManager(Context context) {
         rq = Volley.newRequestQueue(context);
@@ -42,8 +46,7 @@ public class HttpRequestManager {
      * @param data key-value map of data
      * @param callback function to call upon receiving response
      */
-    public void POST(String url, Map<String, String> data, final RequestCallback callback) {
-        final Map<String, String> params = data;
+    public void POST(String url, final Map<String, String> data, final RequestCallback callback) {
         // Request a string response from the provided URL.
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, // Test POST
                 new Response.Listener<String>() {
@@ -54,14 +57,31 @@ public class HttpRequestManager {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                Log.d(ERROR_TAG, error.getMessage());
             }
         }){
             @Override
             protected Map<String, String> getParams() {
-                return params;
+                return data;
             }
         };
         // Add the request to the RequestQueue.
+        rq.add(stringRequest);
+    }
+
+    public void GET(String url, final RequestCallback callback) {
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        callback.callback(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d(ERROR_TAG, error.getMessage());
+            }
+        });
         rq.add(stringRequest);
     }
 }
